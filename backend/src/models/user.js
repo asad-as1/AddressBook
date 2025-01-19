@@ -31,7 +31,7 @@ const userSchema = new Schema({
   },
   contacts: [{
     type: Schema.Types.ObjectId,
-    ref: 'Contact'
+    ref: 'contacts'
   }],
   createdAt: {
     type: Date,

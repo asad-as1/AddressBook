@@ -138,3 +138,20 @@
       font-size: 14px;
     }
   }
+
+  .password-toggle-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+  }
+  .password-toggle-icon:hover {
+    color: #333;
+  }
+
+  .password-field {
+    position: relative;
+  }
+  

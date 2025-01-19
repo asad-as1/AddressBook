@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios for making HTTP requests
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
 import './SignUp.css';
+import {login} from "../Login/Login"
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -8,50 +12,57 @@ const SignUp = () => {
     email: '',
     password: '',
     confirmPassword: '',
-
-    //TODO for profile picture input and integration of Firebase
-    
   });
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirm password visibility
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required';
     }
-    
+
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Invalid email format';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
-    
     if (Object.keys(newErrors).length === 0) {
-      // Handle successful signup here
-      console.log('Form submitted:', formData);
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_URL}user/register`, formData);
+
+        // console.log('User registered successfully:', response.data);
+        login(formData, navigate, errors, "/");
+        // alert('Signup successful!');
+      } catch (error) {
+        console.error('Error during signup:', error.response?.data || error.message);
+        alert('Signup failed. Please try again.');
+      }
     } else {
       setErrors(newErrors);
     }
@@ -59,15 +70,15 @@ const SignUp = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: '',
       }));
     }
   };
@@ -77,7 +88,7 @@ const SignUp = () => {
       <div className="signup-box">
         <h1>Create Account</h1>
         <p className="subtitle">Please fill in the form to create your account</p>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
@@ -91,7 +102,7 @@ const SignUp = () => {
               />
               {errors.firstName && <span className="error-message">{errors.firstName}</span>}
             </div>
-            
+
             <div className="form-group">
               <input
                 type="text"
@@ -104,7 +115,7 @@ const SignUp = () => {
               {errors.lastName && <span className="error-message">{errors.lastName}</span>}
             </div>
           </div>
-          
+
           <div className="form-group">
             <input
               type="email"
@@ -116,49 +127,45 @@ const SignUp = () => {
             />
             {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
-          
-          <div className="form-group">
+
+          <div className="form-group password-field">
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               name="password"
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
               className={errors.password ? 'error' : ''}
             />
+            <span onClick={() => setShowPassword(!showPassword)} className="password-toggle-icon">
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
-          
-          <div className="form-group">
+
+          <div className="form-group password-field">
             <input
-              type="password"
+              type={showConfirmPassword ? 'text' : 'password'}
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
               className={errors.confirmPassword ? 'error' : ''}
             />
+            <span
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="password-toggle-icon"
+            >
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
             {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
           </div>
 
-          <div className="form-group">
-            <label htmlFor="">Profile Picture</label>
-            <input
-              type="file"
-              name="file"
-              placeholder="Profile Picture"
-              value={formData.file}
-              onChange={handleChange}
-              className={errors.file ? 'error' : ''}
-            />
-            {errors.file && <span className="error-message">{errors.file}</span>}
-          </div>
-          
           <button type="submit" className="signup-button">
             Sign Up
           </button>
         </form>
-        
+
         <p className="login-link">
           Already have an account? <a href="/login">Log in</a>
         </p>

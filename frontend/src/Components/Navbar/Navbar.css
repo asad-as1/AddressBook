@@ -1,47 +1,189 @@
 .navbar {
-    background-color: #2c3e50;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: white;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.navbar.scrolled {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4a90e2;
+  text-decoration: none;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  display: flex;
+  color: #333;
+  text-decoration: none;
+  padding: 0.5rem;
+  position: relative;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #4a90e2;
+}
+
+.search-container {
+  position: relative;
+  width: 250px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  width: 16px;
+  height: 16px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 0.5rem 0.5rem 2rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  /* margin-left: px; */
+}
+.logout-btn {
+  background-color: #d33; /* Red background for a logout button */
+  color: white; /* White text */
+  padding: 10px 20px; /* Padding for a button look */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px; /* Slightly larger font size for visibility */
+  font-weight: bold; /* Bold text */
+  cursor: pointer; /* Pointer cursor for interactivity */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover effects */
+}
+
+.logout-btn:hover {
+  background-color: #a32f2f; /* Slightly darker red on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.logout-btn:active {
+  background-color: #721d1d; /* Even darker red on click */
+  transform: scale(0.95); /* Slightly shrink on click */
+}
+
+
+.search-input:focus {
+  border-color: #4a90e2;
+}
+
+.nav-actions {
+  /* display: flex; */
+  gap: 1rem;
+}
+
+.icon-btn {
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  border-radius: 50%;
+  color: #333;
+}
+
+.icon-btn:hover {
+  background: #f5f5f5;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 8px;
+  height: 8px;
+  background: #ff4757;
+  border-radius: 50%;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .nav-content {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
     padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 1rem;
+    display: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
-  
-  .navbar-container {
-    max-width: 1200px;
-    margin: 0 auto;
+
+  .nav-content.show {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
-  
-  .navbar-brand {
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
+
   .nav-links {
-    display: flex;
-    gap: 2rem;
+    flex-direction: column;
+    width: 100%;
   }
-  
-  .nav-link {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem;
-    transition: color 0.3s ease;
+
+  .search-container {
+    width: 100%;
   }
-  
-  .nav-link:hover {
-    color: #3498db;
+
+  .nav-actions {
+    width: 100%;
+    justify-content: center;
   }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .navbar-container {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .nav-links {
-      gap: 1rem;
-    }
-  }
+}

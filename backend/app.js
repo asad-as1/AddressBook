@@ -35,9 +35,9 @@ const connect = async () => {
 connect();
 
 // Routes
-// const userRouter = require('./src/router/user.routes');
-// const postRouter = require('./src/router/post.routes');
-// app.use("/user", userRouter);
+const userRouter = require('./src/Routers/user.routes');
+// const postRouter = require('./src/Routers/post.routes');
+app.use("/user", userRouter);
 // app.use("/post", postRouter);
 
 // Basic route

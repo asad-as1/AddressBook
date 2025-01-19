@@ -1,11 +1,10 @@
 const User = require('../models/user');
-const Post = require('../models/post')
+// const Post = require('../models/post')
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv')
 dotenv.config(); 
 
 
-// Register a new user
 exports.register = async (req, res) => {
   try {
     // console.log(req.body)
@@ -28,20 +27,20 @@ exports.register = async (req, res) => {
 // Login an existing user
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-
-    const user = await User.findOne({ username });
+    const { email, password } = req.body;
+    
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-
+    
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-
+    
     // Generate a JWT token
-    const token = jwt.sign({ userId: user._id, username: user.username }, process.env.SECRET, {
+    const token = jwt.sign({ userId: user._id, email: user.email }, process.env.SECRET, {
       expiresIn: '7d'
     });
    
@@ -49,8 +48,7 @@ exports.login = async (req, res) => {
       message: 'Login successful',
       token,
       user: {
-        username: user.username,
-        role: user.role,
+        userId: user._id,
         email: user.email, 
       },
     });
@@ -73,9 +71,9 @@ exports.logout = (req, res) => {
 
 // Get user profile
 exports.getProfile = async (req, res) => {
-  // console.log(req.user);
   try {
-    const user = await User.findById(req.user.id).select('-password').populate('posts'); // Exclude the password field
+    const user = await User.findById(req.user.id).select('-password'); 
+    // console.log(user)
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
