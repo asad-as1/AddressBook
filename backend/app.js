@@ -36,9 +36,9 @@ connect();
 
 // Routes
 const userRouter = require('./src/Routers/user.routes');
-// const postRouter = require('./src/Routers/post.routes');
+const contactRouter = require('./src/Routers/contact.routes');
 app.use("/user", userRouter);
-// app.use("/post", postRouter);
+app.use("/contact", contactRouter);
 
 // Basic route
 app.get("/", (req, res) => {

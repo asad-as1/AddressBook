@@ -1,31 +1,42 @@
-import React from 'react';
-import './Home.css'
-import { Link } from 'react-router-dom';
-import img1 from "../../img/img1.jpg"
-import img2 from "../../img/img2.jpg"
+import React from "react";
+import "./Home.css";
+import { Link } from "react-router-dom";
+import img1 from "../../img/img1.jpg";
+import img2 from "../../img/img2.jpg";
+import Cookie from "cookies-js";
 
 const HomePage = () => {
+  const user = Cookie.get("user");
+  // console.log(user)
   return (
     <div className="modern-home">
       {/* Hero Section with Animated Background */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Address Book <span className="highlight">Pro</span></h1>
+          <h1>
+            Address Book <span className="highlight">Pro</span>
+          </h1>
           <p className="tagline">Organize your world, one contact at a time</p>
-          <div className="hero-buttons">
-            <Link to='/signup' className="glow-button">Sign Up Now</Link>
-            <Link to='/login' className="outline-button">Login</Link>
-          </div>
+          {!user && (
+            <div className="hero-buttons">
+              <Link to="/signup" className="glow-button">
+                Sign Up Now
+              </Link>
+              <Link to="/login" className="outline-button">
+                Login
+              </Link>
+            </div>
+          )}
         </div>
-        
+
         <div className="hero-graphic">
           <img
             src={img2}
             alt="Address Book Interface"
-            className="floating-image"
+            className="overview-img"
           />
         </div>
-        
+
         <div className="animated-circles">
           <div className="circle c1"></div>
           <div className="circle c2"></div>
@@ -42,13 +53,13 @@ const HomePage = () => {
             <h3>Smart Organization</h3>
             <p>Automatically categorize and sort your contacts</p>
           </div>
-          
+
           <div className="feature-card">
             <div className="feature-icon sync-icon">🔄</div>
             <h3>Cloud Sync</h3>
             <p>Access your contacts from any device, anytime</p>
           </div>
-          
+
           <div className="feature-card">
             <div className="feature-icon security-icon">🔒</div>
             <h3>Bank-grade Security</h3>
@@ -108,12 +119,8 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        <div className="overview-image">
-          <img
-            src={img1}
-            alt="Features Overview"
-            className="overview-img"
-          />
+        <div className="hero-section">
+          <img src={img1} alt="Features Overview" className="overview-img" />
         </div>
       </section>
 
@@ -121,8 +128,17 @@ const HomePage = () => {
       <section className="cta-section">
         <div className="cta-content">
           <h2>Start Organizing Today</h2>
-          <p>Join thousands of satisfied users and transform how you manage contacts</p>
-          <button className="pulse-button"><Link to='/signup' className="pulse-button">Register Now</Link></button>
+          <p>
+            Join thousands of satisfied users and transform how you manage
+            contacts
+          </p>
+          {!user && (
+            <button className="pulse-button">
+              <Link to="/signup" className="pulse-button">
+                Register Now
+              </Link>
+            </button>
+          )}
         </div>
       </section>
     </div>

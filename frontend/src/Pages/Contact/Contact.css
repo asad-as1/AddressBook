@@ -1,0 +1,256 @@
+.contacts-table-container {
+    padding: 1.5rem;
+    font-family: system-ui, -apple-system, sans-serif;
+    max-width: 1200px;
+    margin: 60px auto;
+  }
+
+  .error-message {
+    text-align: center;
+  }
+  
+  /* Table Header Styles */
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .table-header h2 {
+    margin: 0;
+    color: #2d3748;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  /* Search Styles */
+  .search-container {
+    flex: 1;
+    max-width: 300px;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+  }
+  
+  /* Table Responsive Wrapper */
+  .table-responsive {
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Table Styles */
+  .contacts-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: white;
+  }
+  
+  .contacts-table th,
+  .contacts-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .contacts-table th {
+    background-color: #f7fafc;
+    font-weight: 600;
+    color: #4a5568;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  /* Sortable Headers */
+  .sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  .sortable:hover {
+    background-color: #edf2f7;
+  }
+  
+  .th-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .sort-icon {
+    opacity: 0.5;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+  }
+  
+  .sortable.active .sort-icon {
+    opacity: 1;
+  }
+  
+  /* Table Body Styles */
+  .contacts-table tbody tr {
+    transition: background-color 0.2s ease;
+  }
+  
+  .contacts-table tbody tr:hover {
+    background-color: #f7fafc;
+  }
+  
+  .highlight-phone a {
+    color: #4299e1;
+    text-decoration: none;
+  }
+  
+  .highlight-phone a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Button Styles */
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .update-button {
+    background-color: #4299e1;
+    color: white;
+  }
+  
+  .update-button:hover {
+    background-color: #3182ce;
+  }
+  
+  .delete-button {
+    background-color: #f56565;
+    color: white;
+  }
+  
+  .delete-button:hover {
+    background-color: #e53e3e;
+  }
+  
+  /* No Results Message */
+  .no-results {
+    text-align: center;
+    padding: 2rem;
+    color: #718096;
+    font-size: 0.875rem;
+  }
+  
+  /* Responsive Styles */
+  @media screen and (max-width: 768px) {
+    .contacts-table {
+      display: block;
+    }
+  
+    .contacts-table thead {
+      display: none;
+    }
+  
+    .contacts-table tbody,
+    .contacts-table tr,
+    .contacts-table td {
+      display: block;
+    }
+  
+    .contacts-table tr {
+      margin-bottom: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      background-color: white;
+    }
+  
+    .contacts-table td {
+      display: flex;
+      padding: 0.75rem 1rem;
+      border: none;
+      align-items: center;
+    }
+  
+    .contacts-table td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      width: 120px;
+      min-width: 120px;
+      color: #4a5568;
+    }
+  
+    .action-buttons {
+      justify-content: end;
+      margin-top: 0.5rem;
+      color: red;
+      /* background-color: blue; */
+    }
+  
+    .btn {
+      flex: 1;
+    }
+  
+    .table-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .search-container {
+      max-width: none;
+    }
+  }
+  
+  /* Animation for Sort Change */
+  @keyframes highlight {
+    0% {
+      background-color: #ebf8ff;
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  
+  .contacts-table tr.highlight {
+    animation: highlight 1s ease;
+  }
+  
+  /* Accessibility Improvements */
+  @media (prefers-reduced-motion: reduce) {
+    .contacts-table tr,
+    .btn,
+    .sortable {
+      transition: none;
+    }
+  }
+  
+  /* Focus States */
+  .btn:focus-visible,
+  .search-input:focus-visible {
+    outline: 2px solid #4299e1;
+    outline-offset: 2px;
+  }

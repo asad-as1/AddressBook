@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// const Contacts = require("../models/contacts")
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv')
 dotenv.config();
@@ -31,7 +32,7 @@ const userSchema = new Schema({
   },
   contacts: [{
     type: Schema.Types.ObjectId,
-    ref: 'contacts'
+    ref: 'Contacts'
   }],
   createdAt: {
     type: Date,

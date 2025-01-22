@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv')
+// const User = require("../models/user")
 dotenv.config();
 
 const Schema = mongoose.Schema;
 
 // Define the Contact schema
 const contactSchema = new Schema({
-  name: {
+  firstName: {
+    type: String,
+  },
+  lastName: {
     type: String,
   },
   address: {
@@ -15,20 +19,19 @@ const contactSchema = new Schema({
   },
   phone: {
     type: Number,
+    required: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true,
-    trim: true,
-    lowercase: true
   },
-  profilePicture: {
-    type: String,
-    default: ''
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
   },
 });
 
 
-const Contact = mongoose.model('Contact', contactSchema);
+const Contact = mongoose.model('Contacts', contactSchema);
 module.exports = Contact;

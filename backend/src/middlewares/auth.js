@@ -5,6 +5,7 @@ const User = require('../models/user');
 
 const authenticate = async (req, res, next) => {
   const token = req.body;
+  // console.log(req.body)
   
   if (!token.token) {
     return res.status(401).json({ message: 'Unauthorized1' });
