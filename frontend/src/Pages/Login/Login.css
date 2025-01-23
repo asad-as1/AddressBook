@@ -148,7 +148,6 @@
   }
   
   
-  /* Responsive Design */
   @media (max-width: 768px) {
     .login-box {
       padding: 30px 20px;

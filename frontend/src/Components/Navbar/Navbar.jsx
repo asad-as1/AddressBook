@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Menu, X, User } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { Link, useNavigate } from "react-router-dom";
 import Cookie from "cookies-js";
 import axios from "axios";
-import Swal from "sweetalert2"; // Import SweetAlert2
+import Swal from "sweetalert2"; 
 import "./Navbar.css";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const navigate = useNavigate(); // Initialize navigate for redirection
+  const navigate = useNavigate();
+  const menuRef = useRef(null); 
 
   const user = Cookie.get("user");
   const BACKEND_URL = import.meta.env.VITE_URL;
@@ -43,7 +44,20 @@ const Navbar = () => {
     }
   }, [user, BACKEND_URL]);
 
-  // Logout Function
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    if (isMobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileMenuOpen]);
+
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -56,12 +70,8 @@ const Navbar = () => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Clear cookie and update state
-        // Cookie.remove("user");
         Cookie.expire("user");
         setIsAuthenticated(false);
-
-        // Success feedback
         Swal.fire({
           title: "Logged Out!",
           text: "You have been successfully logged out.",
@@ -69,8 +79,6 @@ const Navbar = () => {
           timer: 2000,
           showConfirmButton: false,
         });
-
-        // Redirect to login page
         navigate("/login");
       }
     });
@@ -79,12 +87,10 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${isScrolled ? "scrolled" : ""}`}>
       <div className="nav-container">
-        {/* Logo */}
         <Link to="/" className="nav-logo">
           AddressBook
         </Link>
 
-        {/* Mobile Menu Button */}
         <button
           className="mobile-menu-btn"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -92,13 +98,13 @@ const Navbar = () => {
           {isMobileMenuOpen ? <X /> : <Menu />}
         </button>
 
-        {/* Nav Links */}
-        <div className={`nav-content ${isMobileMenuOpen ? "show" : ""}`}>
+        <div
+          className={`nav-content ${isMobileMenuOpen ? "show" : ""}`}
+          ref={menuRef}
+        >
           <ul className="nav-links">
             <li>
-              <Link to="/" >
-                Home
-              </Link>
+              <Link to="/">Home</Link>
             </li>
             {isAuthenticated && (
               <>
@@ -126,7 +132,6 @@ const Navbar = () => {
               </>
             )}
           </ul>
-
         </div>
       </div>
     </nav>

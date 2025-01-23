@@ -84,28 +84,27 @@
   border: 1px solid #ddd;
   border-radius: 20px;
   outline: none;
-  /* margin-left: px; */
 }
 .logout-btn {
-  background-color: #d33; /* Red background for a logout button */
-  color: white; /* White text */
-  padding: 10px 20px; /* Padding for a button look */
-  border: none; /* Remove default border */
-  border-radius: 5px; /* Rounded corners */
-  font-size: 16px; /* Slightly larger font size for visibility */
-  font-weight: bold; /* Bold text */
-  cursor: pointer; /* Pointer cursor for interactivity */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition for hover effects */
+  background-color: #d33; 
+  color: white; 
+  padding: 10px 20px; 
+  border: none; 
+  border-radius: 5px; 
+  font-size: 16px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease, transform 0.2s ease; 
 }
 
 .logout-btn:hover {
-  background-color: #a32f2f; /* Slightly darker red on hover */
-  transform: scale(1.05); /* Slightly enlarge on hover */
+  background-color: #a32f2f; 
+  transform: scale(1.05); 
 }
 
 .logout-btn:active {
-  background-color: #721d1d; /* Even darker red on click */
-  transform: scale(0.95); /* Slightly shrink on click */
+  background-color: #721d1d; 
+  transform: scale(0.95); 
 }
 
 

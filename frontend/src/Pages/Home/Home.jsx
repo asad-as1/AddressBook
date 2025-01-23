@@ -10,7 +10,6 @@ const HomePage = () => {
   // console.log(user)
   return (
     <div className="modern-home">
-      {/* Hero Section with Animated Background */}
       <section className="hero-section">
         <div className="hero-content">
           <h1>
@@ -44,7 +43,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Features Grid */}
       <section className="features-section">
         <h2>Powerful Features</h2>
         <div className="features-grid">
@@ -68,7 +66,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Statistics with Animation */}
       <section className="stats-section">
         <div className="stat-card">
           <div className="stat-number">50k+</div>
@@ -84,7 +81,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Updated Features Overview Section */}
       <section className="overview-section">
         <div className="overview-content">
           <h2>Everything You Need</h2>
@@ -124,7 +120,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="cta-section">
         <div className="cta-content">
           <h2>Start Organizing Today</h2>

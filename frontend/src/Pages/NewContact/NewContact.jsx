@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 const NewContact = ({ contactDetails }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState(!!contactDetails); // Edit mode if contactDetails is passed
+  const [isEditing, setIsEditing] = useState(!!contactDetails); 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,7 +19,6 @@ const NewContact = ({ contactDetails }) => {
 
   const token = Cookie.get("user");
 
-  // Populate form data if editing
   useEffect(() => {
     if (contactDetails) {
       setFormData({
@@ -36,11 +35,10 @@ const NewContact = ({ contactDetails }) => {
     const { name, value } = e.target;
 
     if (name === "phone") {
-      // Allow only numbers for phone and limit to 10 digits
-      const numericValue = value.replace(/\D/g, ""); // Remove non-digit characters
+      const numericValue = value.replace(/\D/g, ""); 
       setFormData((prev) => ({
         ...prev,
-        [name]: numericValue.slice(0, 10), // Limit to 10 digits
+        [name]: numericValue.slice(0, 10), 
       }));
     } else {
       setFormData((prev) => ({
@@ -54,7 +52,6 @@ const NewContact = ({ contactDetails }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Ensure phone number is exactly 10 digits
     const isValidPhone = /^[0-9]{10}$/.test(formData.phone);
     if (!isValidPhone) {
       Swal.fire({
@@ -69,7 +66,6 @@ const NewContact = ({ contactDetails }) => {
 
     try {
       if (isEditing) {
-        // Update contact API call
         const response = await axios.put(
           `${import.meta.env.VITE_URL}contact/updatecontact/${contactDetails._id}`,
           { formData, token }
@@ -83,7 +79,6 @@ const NewContact = ({ contactDetails }) => {
         });
         navigate("/contacts");
       } else {
-        // Create new contact API call
         const response = await axios.post(
           `${import.meta.env.VITE_URL}contact/addcontact`,
           { formData, token }
@@ -96,7 +91,6 @@ const NewContact = ({ contactDetails }) => {
           confirmButtonText: "OK",
         });
 
-        // Reset form if creating a new contact
         setFormData({
           firstName: "",
           lastName: "",

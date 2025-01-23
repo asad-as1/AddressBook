@@ -17,7 +17,6 @@ const Contacts = () => {
 
   const token = Cookie.get("user");
 
-  // Fetch contacts from the backend
   useEffect(() => {
     const fetchContacts = async () => {
       try {
@@ -72,9 +71,6 @@ const Contacts = () => {
     return filteredContacts;
   };
 
-  
-  //TODO
-
   const handleDelete = async (id) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -104,13 +100,6 @@ const Contacts = () => {
   }
  });
   };
-
-
-  //TODO
-
-  // const handleUpdate = (id) => {
-  //   alert(`Update feature for contact ID ${id} is not implemented yet.`);
-  // };
 
 
   const getSortIcon = (field) => {

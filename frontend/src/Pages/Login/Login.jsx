@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Cookie from "cookies-js";
 import Swal from 'sweetalert2';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import icons
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 
 export const login = async (data, navigate, setApiError, from) => {
   try {
@@ -22,7 +22,7 @@ export const login = async (data, navigate, setApiError, from) => {
         timer: 1500,
         showConfirmButton: false,
       }).then(() => {
-        navigate(from || '/'); // Redirect after successful login
+        navigate(from || '/'); 
       });
     }
   } catch (error) {
@@ -43,11 +43,11 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate(); // Use at the top level
-  const location = useLocation(); // Use at the top level
-  const from = location.state?.from || "/"; // Get the redirection path
+  const navigate = useNavigate(); 
+  const location = useLocation(); 
+  const from = location.state?.from || "/"; 
 
   const validateForm = () => {
     const newErrors = {};
@@ -71,11 +71,11 @@ const Login = () => {
 
     if (Object.keys(newErrors).length === 0) {
       setErrors({});
-      setIsLoading(true); // Start loading
-      setApiError(''); // Clear previous API errors
+      setIsLoading(true); 
+      setApiError(''); 
 
-      await login(formData, navigate, setApiError, from); // Pass `from` for redirection
-      setIsLoading(false); // Stop loading
+      await login(formData, navigate, setApiError, from); 
+      setIsLoading(false); 
     } else {
       setErrors(newErrors);
     }
@@ -87,7 +87,7 @@ const Login = () => {
       ...prevData,
       [name]: value,
     }));
-    // Clear error when user starts typing
+    
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -117,7 +117,7 @@ const Login = () => {
 
           <div className="form-group password-field">
             <input
-              type={showPassword ? 'text' : 'password'} // Toggle input type
+              type={showPassword ? 'text' : 'password'} 
               name="password"
               placeholder="Password"
               value={formData.password}

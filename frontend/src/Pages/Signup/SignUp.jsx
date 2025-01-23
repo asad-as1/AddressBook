@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios for making HTTP requests
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
+import axios from 'axios'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import './SignUp.css';
 import {login} from "../Login/Login"
 import { useNavigate } from 'react-router-dom';
@@ -16,8 +16,8 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirm password visibility
+  const [showPassword, setShowPassword] = useState(false); 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
 
   const validateForm = () => {
     const newErrors = {};
@@ -58,7 +58,6 @@ const SignUp = () => {
 
         // console.log('User registered successfully:', response.data);
         login(formData, navigate, errors, "/");
-        // alert('Signup successful!');
       } catch (error) {
         console.error('Error during signup:', error.response?.data || error.message);
         alert('Signup failed. Please try again.');
@@ -74,7 +73,6 @@ const SignUp = () => {
       ...prevData,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,

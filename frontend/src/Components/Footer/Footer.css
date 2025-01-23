@@ -64,7 +64,6 @@
     font-size: 0.9rem;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
     .footer-content {
         grid-template-columns: repeat(2, 1fr);
