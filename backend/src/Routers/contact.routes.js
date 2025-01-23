@@ -5,9 +5,8 @@ const { authenticate } = require('../middlewares/auth');
 
 router.post('/addcontact', authenticate, contactController.addContact);
 router.post('/getcontact', authenticate, contactController.getAllContacts);
-
-// router.post('/profile', authenticate, userController.getProfile);
-// router.put('/profile', authenticate, userController.updateProfile);
-// router.delete('/delete', authenticate, userController.deleteUser); //TODO
+router.post('/delete', authenticate, contactController.deleteContact);
+router.post('/:id', authenticate, contactController.getContactById);
+router.put('/updatecontact/:id', authenticate, contactController.updateContact);
 
 module.exports = router;

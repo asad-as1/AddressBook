@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./NewContact.css";
 import Cookie from "cookies-js";
 import Swal from "sweetalert2";
 
-const NewContact = () => {
+const NewContact = ({ contactDetails }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(!!contactDetails); // Edit mode if contactDetails is passed
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -16,24 +19,48 @@ const NewContact = () => {
 
   const token = Cookie.get("user");
 
+  // Populate form data if editing
+  useEffect(() => {
+    if (contactDetails) {
+      setFormData({
+        firstName: contactDetails.firstName || "",
+        lastName: contactDetails.lastName || "",
+        phone: contactDetails.phone || "",
+        address: contactDetails.address || "",
+        email: contactDetails.email || "",
+      });
+    }
+  }, [contactDetails]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    if (name === "phone") {
+      // Allow only numbers for phone and limit to 10 digits
+      const numericValue = value.replace(/\D/g, ""); // Remove non-digit characters
+      setFormData((prev) => ({
+        ...prev,
+        [name]: numericValue.slice(0, 10), // Limit to 10 digits
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Validate phone number length
-    if (formData.phone.length !== 10) {
+    // Ensure phone number is exactly 10 digits
+    const isValidPhone = /^[0-9]{10}$/.test(formData.phone);
+    if (!isValidPhone) {
       Swal.fire({
         icon: "error",
         title: "Invalid Phone Number",
-        text: "Phone number must be exactly 10 digits.",
+        text: "Phone number must be exactly 10 digits and numeric.",
         confirmButtonText: "OK",
       });
       setIsSubmitting(false);
@@ -41,38 +68,54 @@ const NewContact = () => {
     }
 
     try {
-      // Send API request to create a new contact
-      const response = await axios.post(
-        `${import.meta.env.VITE_URL}contact/addcontact`,
-        { formData, token }
-      );
+      if (isEditing) {
+        // Update contact API call
+        const response = await axios.put(
+          `${import.meta.env.VITE_URL}contact/updatecontact/${contactDetails._id}`,
+          { formData, token }
+        );
 
-      // Reset form after successful submission
-      setFormData({
-        firstName: "",
-        lastName: "",
-        phone: "",
-        address: "",
-        email: "",
-      });
+        Swal.fire({
+          icon: "success",
+          title: "Contact Updated",
+          text: "Your contact has been updated successfully!",
+          confirmButtonText: "OK",
+        });
+        navigate("/contacts");
+      } else {
+        // Create new contact API call
+        const response = await axios.post(
+          `${import.meta.env.VITE_URL}contact/addcontact`,
+          { formData, token }
+        );
 
-      // Show success message with SweetAlert2
-      Swal.fire({
-        icon: "success",
-        title: "Contact Created",
-        text: "Your contact has been created successfully!",
-        confirmButtonText: "OK",
-      });
+        Swal.fire({
+          icon: "success",
+          title: "Contact Created",
+          text: "Your contact has been created successfully!",
+          confirmButtonText: "OK",
+        });
+
+        // Reset form if creating a new contact
+        setFormData({
+          firstName: "",
+          lastName: "",
+          phone: "",
+          address: "",
+          email: "",
+        });
+      }
     } catch (error) {
       console.error(
-        "Error creating contact:",
+        isEditing ? "Error updating contact:" : "Error creating contact:",
         error.response?.data || error.message
       );
 
-      // Show error message with SweetAlert2
       Swal.fire({
         icon: "error",
-        title: "Failed to Create Contact",
+        title: isEditing
+          ? "Failed to Update Contact"
+          : "Failed to Create Contact",
         text: error.response?.data?.message || "An error occurred. Please try again.",
         confirmButtonText: "OK",
       });
@@ -83,7 +126,7 @@ const NewContact = () => {
 
   const isFormValid =
     formData.firstName.trim() !== "" &&
-    formData.phone.trim() !== "" &&
+    formData.phone !== "" &&
     formData.email.trim() !== "" &&
     formData.address.trim() !== "";
 
@@ -98,7 +141,7 @@ const NewContact = () => {
       <div className="contact-container">
         <div className="contact-card">
           <div className="card-header">
-            <h2>New Contact</h2>
+            <h2>{isEditing ? "Edit Contact" : "New Contact"}</h2>
             <p>Fill out all fields to continue</p>
           </div>
 
@@ -188,7 +231,13 @@ const NewContact = () => {
                 }`}
                 disabled={!isFormValid || isSubmitting}
               >
-                {isSubmitting ? "Creating..." : "Create"}
+                {isSubmitting
+                  ? isEditing
+                    ? "Updating..."
+                    : "Creating..."
+                  : isEditing
+                  ? "Update"
+                  : "Create"}
               </button>
             </div>
           </form>

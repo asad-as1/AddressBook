@@ -109,11 +109,6 @@ const Navbar = () => {
                   <Link to="/newcontact">New Contact</Link>
                 </li>
                 <li>
-                  <Link to="/profile" className="icon-btn">
-                    Profile
-                  </Link>
-                </li>
-                <li>
                   <button className="logout-btn" onClick={handleLogout}>
                     Logout
                   </button>

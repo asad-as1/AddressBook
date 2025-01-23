@@ -1,27 +1,22 @@
-const Contact = require("../models/contacts"); // Import your Contact model
-const User = require("../models/user"); // Import your User model
-const jwt = require("jsonwebtoken"); // For decoding the user token
+const Contact = require("../models/contacts"); 
+const User = require("../models/user"); 
+const jwt = require("jsonwebtoken"); 
 
-// Controller to add a new contact
 const addContact = async (req, res) => {
   try {
     const { firstName, lastName, phone, address, email } = req.body.formData;
 
-    // Validate input
     if (!firstName || !phone) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Find the user and populate their contacts
     const user = await User.findById(req.user.id).populate("contacts");
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Check if the phone number already exists in the user's contacts
     const isPhoneExist = user.contacts.some((contact) => contact?.phone == phone);
-    // console.log(user)
 
     if (isPhoneExist) {
       return res
@@ -29,7 +24,6 @@ const addContact = async (req, res) => {
         .json({ message: "A contact with this phone number already exists." });
     }
 
-    // Create a new contact
     const newContact = await Contact.create({
       userId: req.user.id,
       firstName,
@@ -39,7 +33,6 @@ const addContact = async (req, res) => {
       email,
     });
 
-    // Add the contact ID to the user's contacts array
     user.contacts.push(newContact._id);
     await user.save();
 
@@ -54,17 +47,14 @@ const addContact = async (req, res) => {
 };
 
 
-
-// Controller to fetch all contacts for a particular user
 const getAllContacts = async (req, res) => {
   try {
-    const token = req.body.token; // Get the token from the request body
+    const token = req.body.token; 
 
     if (!token) {
       return res.status(400).json({ message: "Token is required" });
     }
 
-    // Find the user and populate their contacts
     const user = await User.findById(req.user.id).populate("contacts");
     let contacts = user.contacts
 
@@ -85,4 +75,94 @@ const getAllContacts = async (req, res) => {
   }
 };
 
-module.exports = { addContact, getAllContacts };
+
+const deleteContact = async (req, res) => {
+  try {
+    const contactId  = req.body.id;
+    const contact = await Contact.findById(contactId);
+
+    if (!contact) {
+      return res.status(404).json({ message: "Contact not found." });
+    }
+
+    if (contact.userId.toString() !== req.user.id) {
+      return res.status(401).json({ message: "Unauthorized to delete this contact." });
+    }
+
+    const deletedContact = await Contact.findByIdAndDelete(contactId)
+
+    const user = await User.findById(req.user.id);
+    user.contacts.pull(contactId);
+    await user.save();
+
+    res.status(200).json({ message: "Contact deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting contact:", error.message);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+
+const getContactById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const contact = await Contact.findById(id);
+
+    if (!contact) {
+      return res.status(404).json({ message: "Contact not found." });
+    }
+
+    if (contact.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized to view this contact." });
+    }
+
+    res.status(200).json({
+      message: "Contact fetched successfully.",
+      contact,
+    });
+  } catch (error) {
+    console.error("Error fetching contact by ID:", error.message);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+
+const updateContact = async (req, res) => {
+  try {
+    const { id } = req.params; 
+    const { firstName, lastName, phone, address, email } = req.body.formData; 
+
+    if (!id || (!firstName && !lastName && !phone && !address && !email)) {
+      return res.status(400).json({ message: "Please provide valid data to update." });
+    }
+
+    const contact = await Contact.findById(id);
+
+    if (!contact) {
+      return res.status(404).json({ message: "Contact not found." });
+    }
+
+    if (contact.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized to update this contact." });
+    }
+
+    if (firstName) contact.firstName = firstName;
+    if (lastName) contact.lastName = lastName;
+    if (phone) contact.phone = phone;
+    if (address) contact.address = address;
+    if (email) contact.email = email;
+
+    const updatedContact = await contact.save();
+
+    res.status(200).json({
+      message: "Contact updated successfully.",
+      contact: updatedContact,
+    });
+  } catch (error) {
+    console.error("Error updating contact:", error.message);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+module.exports = { addContact, getAllContacts, deleteContact, getContactById, updateContact };

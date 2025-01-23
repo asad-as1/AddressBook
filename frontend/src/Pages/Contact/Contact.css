@@ -143,6 +143,8 @@
   .update-button {
     background-color: #4299e1;
     color: white;
+    text-decoration: none;
+    text-align: center;
   }
   
   .update-button:hover {

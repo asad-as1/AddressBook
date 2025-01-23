@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {Link} from "react-router-dom"
 import { Search } from 'lucide-react';
 import Cookie from "cookies-js";
 import './Contact.css';
+import Swal from 'sweetalert2';
+
 
 const Contacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -72,19 +75,35 @@ const Contacts = () => {
   
   //TODO
 
-  // const handleDelete = async (id) => {
-  //   if (window.confirm('Are you sure you want to delete this contact?')) {
-  //     try {
-  //       const response = await axios.post(
-  //         `${import.meta.env.VITE_URL}contact/delet`,
-  //         { token }
-  //       );
-  //       setContacts(contacts.filter((contact) => contact._id !== id));
-  //     } catch (err) {
-  //       alert('Failed to delete contact. Please try again later.');
-  //     }
-  //   }
-  // };
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won’t be able to undo this action!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.post(`${import.meta.env.VITE_URL}contact/delete`, {
+            token,
+            id,
+          });
+          setContacts(contacts.filter((contact) => contact._id !== id));
+          Swal.fire('Deleted!', 'The contact has been deleted.', 'success');
+        } catch (err) {
+          Swal.fire(
+            'Failed!',
+            'Failed to delete the contact. Please try again later.',
+            'error'
+          );
+        }
+  }
+ });
+  };
 
 
   //TODO
@@ -152,12 +171,12 @@ const Contacts = () => {
                 </td>
                 <td data-label="Address">{contact.address}</td>
                 <td className="action-buttons">
-                  <button
+                  <Link
                     className="btn update-button"
-                    onClick={() => handleUpdate(contact._id)}
+                    to={`/contacts/edit/${contact._id}`}
                   >
                     Update
-                  </button>
+                  </Link>
                   <button
                     className="btn delete-button"
                     onClick={() => handleDelete(contact._id)}

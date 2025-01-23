@@ -6,6 +6,7 @@ import NewContact from './Pages/NewContact/NewContact.jsx';
 import Login from './Pages/Login/Login.jsx';
 import Signup from './Pages/SignUp/SignUp.jsx';
 import Home from './Pages/Home/Home.jsx';
+import EditContact from './Pages/EditContact/EditContact.jsx';
 import ProtectedRoute from './Components/ProtectedRoute.jsx'; 
 import './index.css';
 import App from './App.jsx';
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: '/newcontact',
         element: (<ProtectedRoute element={<NewContact />} />), 
+      },
+      {
+        path: '/contacts/edit/:id',
+        element: (<ProtectedRoute element={<EditContact />} />), 
       },
     ],
   },

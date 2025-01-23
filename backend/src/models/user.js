@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
-// const Contacts = require("../models/contacts")
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv')
 dotenv.config();
 
 const Schema = mongoose.Schema;
 
-// Define the User schema
 const userSchema = new Schema({
   firstName: {
     type: String,
@@ -42,7 +40,6 @@ const userSchema = new Schema({
   timestamps: true
 });
 
-// Pre-save hook to hash the password before saving
 userSchema.pre('save', async function(next) {
   if(this.isModified('password') || this.isNew) {
     const saltRounds = 10;
@@ -51,7 +48,6 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
-// Method to compare passwords
 userSchema.methods.comparePassword = function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

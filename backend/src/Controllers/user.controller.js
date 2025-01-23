@@ -1,5 +1,4 @@
 const User = require('../models/user');
-// const Post = require('../models/post')
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv')
 dotenv.config(); 
@@ -7,7 +6,6 @@ dotenv.config();
 
 exports.register = async (req, res) => {
   try {
-    // console.log(req.body)
     const { firstName, lastName, email, password, profilePicture, bio } = req.body;
     const existingUser = await User.findOne({ email });
 
@@ -24,7 +22,6 @@ exports.register = async (req, res) => {
   }
 };
 
-// Login an existing user
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -39,7 +36,6 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     
-    // Generate a JWT token
     const token = jwt.sign({ userId: user._id, email: user.email }, process.env.SECRET, {
       expiresIn: '7d'
     });
@@ -57,11 +53,9 @@ exports.login = async (req, res) => {
   }
 };
 
-// Logout the user
 exports.logout = (req, res) => {
   try {
-    // Clear the token from the client-side (assuming it's stored in cookies)
-    res.clearCookie('token'); // or res.cookie('token', '', { expires: new Date(0) });
+    res.clearCookie('token'); 
 
     res.status(200).json({ message: 'Logout successful' });
   } catch (error) {
@@ -69,11 +63,9 @@ exports.logout = (req, res) => {
   }
 };
 
-// Get user profile
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password'); 
-    // console.log(user)
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -85,17 +77,15 @@ exports.getProfile = async (req, res) => {
 };
 
 
-// Update user profile
 exports.updateProfile = async (req, res) => {
   try {
     const { _id, username, name, bio, profilePicture } = req.body;
-    // console.log(_id.toString())
 
     const updatedUser = await User.findByIdAndUpdate(
       _id.toString(),
       { username, name, bio, profilePicture },
       { new: true, runValidators: true }
-    ).select('-password'); // Exclude the password field
+    ).select('-password'); 
 
     res.status(201).json({ message: 'Profile updated successfully', user: updatedUser });
   } catch (error) {
