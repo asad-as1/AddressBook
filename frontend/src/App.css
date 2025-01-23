@@ -1,9 +1,16 @@
-* {
+html, body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  height: 100%;
 }
 
-body {
+#root {
+  height: 100%; 
+}
+
+.top {
   margin-top: 60px;
+  display: grid;
+  grid-template-rows: auto 1fr auto; 
+  height: 100%; 
 }
