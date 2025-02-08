@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import axios from 'axios';
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -45,7 +45,15 @@ const Login = () => {
   const [apiError, setApiError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const token = Cookie("user") 
+
+  useEffect(() => {
+    if (token) {
+      navigate("/"); 
+    }
+  }, [token, navigate]); 
+
   const location = useLocation(); 
   const from = location.state?.from || "/"; 
 

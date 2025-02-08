@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios'; 
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import './SignUp.css';
 import {login} from "../Login/Login"
+import Cookie from "cookies-js";
 import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
@@ -14,6 +15,13 @@ const SignUp = () => {
     confirmPassword: '',
   });
   const navigate = useNavigate();
+
+  const token = Cookie.get('user');
+  useEffect(() => {
+    if (token) {
+      navigate("/"); 
+    }
+  }, [token, navigate]); 
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false); 
