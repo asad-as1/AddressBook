@@ -90,6 +90,7 @@ const NewContact = ({ contactDetails }) => {
           text: "Your contact has been created successfully!",
           confirmButtonText: "OK",
         });
+        navigate("/contacts");
 
         setFormData({
           firstName: "",
